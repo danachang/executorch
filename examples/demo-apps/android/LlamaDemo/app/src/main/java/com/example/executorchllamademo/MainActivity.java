@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.pytorch.executorch.extension.llm.LlmCallback;
 import org.pytorch.executorch.extension.llm.LlmModule;
@@ -102,11 +103,16 @@ public class MainActivity extends AppCompatActivity implements Runnable, LlmCall
     runOnUiThread(
         () -> {
           if (mResultMessage != null) {
-            JSONObject jsonObject = new JSONObject(stats);
-            int numGeneratedTokens = jsonObject.getInt("num_generated_tokens");
-            int inferenceEndMs = jsonObject.getInt("inference_end_ms");
-            int promptEvalEndMs = jsonObject.getInt("prompt_eval_end_ms");
-            float tps = (float) numGeneratedTokens / (inferenceEndMs - promptEvalEndMs) * 1000;
+            float tps = 0;
+            try {
+              JSONObject jsonObject = new JSONObject(stats);
+              int numGeneratedTokens = jsonObject.getInt("num_generated_tokens");
+              int inferenceEndMs = jsonObject.getInt("inference_end_ms");
+              int promptEvalEndMs = jsonObject.getInt("prompt_eval_end_ms");
+              tps = (float) numGeneratedTokens / (inferenceEndMs - promptEvalEndMs) * 1000;
+            } catch (JSONException e) {
+              Log.e("LLM", "Error parsing JSON: " + e.getMessage());
+            }
             mResultMessage.setTokensPerSecond(tps);
             mMessageAdapter.notifyDataSetChanged();
           }
