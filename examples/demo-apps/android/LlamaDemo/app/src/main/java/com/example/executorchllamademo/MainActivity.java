@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements Runnable, LlmCall
   }
 
   @Override
-  public void onStats(String result) {
+  public void onStats(String stats) {
     runOnUiThread(
         () -> {
           if (mResultMessage != null) {

@@ -66,8 +66,8 @@ public class PerfTest implements LlmCallback {
   }
 
   @Override
-  public void onStats(String stats) throws JSONException {
-    JSONObject jsonObject = new JSONObject(stats);
+  public void onStats(String result) throws JSONException {
+    JSONObject jsonObject = new JSONObject(result);
     int numGeneratedTokens = jsonObject.getInt("num_generated_tokens");
     int inferenceEndMs = jsonObject.getInt("inference_end_ms");
     int promptEvalEndMs = jsonObject.getInt("prompt_eval_end_ms");

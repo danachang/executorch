@@ -80,7 +80,6 @@ public class ModelRunner implements LlmCallback {
       int promptEvalEndMs = jsonObject.getInt("prompt_eval_end_ms");
       tps = (float) numGeneratedTokens / (inferenceEndMs - promptEvalEndMs) * 1000;
     } catch (JSONException e) {
-      Log.e("LLM", "Error parsing JSON: " + e.getMessage());
     }
     mCallback.onStats("tokens/second: " + tps);
   }
