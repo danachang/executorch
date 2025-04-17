@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pytorch.executorch.extension.llm.LlmCallback;
@@ -64,7 +65,12 @@ public class PerfTest implements LlmCallback {
   }
 
   @Override
-  public void onStats(float tps) {
+  public void onStats(String stats) {
+    JSONObject jsonObject = new JSONObject(stats);
+    int numGeneratedTokens = jsonObject.getInt("num_generated_tokens");
+    int inferenceEndMs = jsonObject.getInt("inference_end_ms");
+    int promptEvalEndMs = jsonObject.getInt("prompt_eval_end_ms");
+    float tps = (float) numGeneratedTokens / (inferenceEndMs - promptEvalEndMs) * 1000;
     tokensPerSecond.add(tps);
   }
 

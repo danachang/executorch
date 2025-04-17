@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import org.json.JSONObject;
 import org.pytorch.executorch.extension.llm.LlmCallback;
 import org.pytorch.executorch.extension.llm.LlmModule;
 
@@ -97,10 +98,15 @@ public class MainActivity extends AppCompatActivity implements Runnable, LlmCall
   }
 
   @Override
-  public void onStats(float tps) {
+  public void onStats(String result) {
     runOnUiThread(
         () -> {
           if (mResultMessage != null) {
+            JSONObject jsonObject = new JSONObject(stats);
+            int numGeneratedTokens = jsonObject.getInt("num_generated_tokens");
+            int inferenceEndMs = jsonObject.getInt("inference_end_ms");
+            int promptEvalEndMs = jsonObject.getInt("prompt_eval_end_ms");
+            float tps = (float) numGeneratedTokens / (inferenceEndMs - promptEvalEndMs) * 1000;
             mResultMessage.setTokensPerSecond(tps);
             mMessageAdapter.notifyDataSetChanged();
           }

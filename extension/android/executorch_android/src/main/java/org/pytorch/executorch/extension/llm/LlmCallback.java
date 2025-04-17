@@ -37,7 +37,7 @@ public interface LlmCallback {
    */
   @Deprecated
   @DoNotStrip
-  public void onStats(float tps);
+  default public void onStats(float tps) {}
 
   /**
    * Called when the statistics for the generate() is available.
