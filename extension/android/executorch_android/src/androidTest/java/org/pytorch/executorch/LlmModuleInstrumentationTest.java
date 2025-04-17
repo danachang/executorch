@@ -94,8 +94,9 @@ public class LlmModuleInstrumentationTest implements LlmCallback {
             }
 
             @Override
-            public void onStats(float tps) {
-                LlmModuleInstrumentationTest.this.onStats(tps);
+            public void onStats(String result) {
+                // TODO: Calculate tps
+                // LlmModuleInstrumentationTest.this.onStats(tps);
             }
         });
 

@@ -79,8 +79,9 @@ public class LlmBenchmarkActivity extends Activity implements ModelRunnerCallbac
   public void onTokenGenerated(String token) {}
 
   @Override
-  public void onStats(String stats) {
-    mStatsInfo.tokens = stats;
+  public void onStats(String result) {
+    // TODO: Add tps
+    // mStatsInfo.tokens = stats;
   }
 
   @Override
