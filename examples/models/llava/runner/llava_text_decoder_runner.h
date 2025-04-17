@@ -19,9 +19,8 @@ class ET_EXPERIMENTAL LlavaTextDecoderRunner
  public:
   LlavaTextDecoderRunner(
       executorch::extension::Module* module,
-      int32_t vocab_size,
-      float temperature)
-      : TextDecoderRunner(module, true, vocab_size, temperature){};
+      int32_t vocab_size)
+      : TextDecoderRunner(module, true, vocab_size){};
 
   inline executorch::runtime::Result<executorch::aten::Tensor> step(
       executorch::extension::TensorPtr& tokens,

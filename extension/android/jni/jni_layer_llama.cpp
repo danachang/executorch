@@ -219,12 +219,15 @@ class ExecuTorchLlmJni : public facebook::jni::HybridClass<ExecuTorchLlmJni> {
           [callback](const llm::Stats& result) { callback->onStats(result); },
           echo);
     } else if (model_type_category_ == MODEL_TYPE_CATEGORY_LLM) {
+      executorch::extension::llm::GenerationConfig config{
+          .seq_len = seq_len,
+          .echo = echo,
+      };
       runner_->generate(
           prompt->toStdString(),
-          seq_len,
+          config,
           [callback](std::string result) { callback->onResult(result); },
-          [callback](const llm::Stats& result) { callback->onStats(result); },
-          echo);
+          [callback](const llm::Stats& result) { callback->onStats(result); });
     }
     return 0;
   }

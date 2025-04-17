@@ -24,15 +24,8 @@ namespace llm {
 TextDecoderRunner::TextDecoderRunner(
     Module* module,
     bool use_kv_cache,
-    int32_t vocab_size,
-    float temperature)
-    : module_(module),
-      sampler_(std::make_unique<Sampler>(
-          vocab_size,
-          temperature,
-          kTopp,
-          static_cast<unsigned long long>(std::time(nullptr)))),
-      use_kv_cache_(use_kv_cache) {}
+    int32_t vocab_size)
+    : module_(module), use_kv_cache_(use_kv_cache) {}
 
 // This function is functional, meaning it shouldn't modify any state of the
 // input. It should be safe to call multiple times with the same inputs. The

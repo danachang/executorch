@@ -48,7 +48,7 @@ Error LlavaRunner::load() {
 
   // Load the text decoder runner
   text_decoder_runner_ = std::make_unique<LlavaTextDecoderRunner>(
-      module_.get(), tokenizer_->vocab_size(), temperature_);
+      module_.get(), tokenizer_->vocab_size());
   text_decoder_runner_->load();
 
   // Load the text prefiller
@@ -117,7 +117,11 @@ Error LlavaRunner::generate_from_pos(
 
   // Generate tokens
   int64_t num_generated_tokens = ET_UNWRAP(text_token_generator_->generate(
-      {prefill_next_token}, start_pos, seq_len, token_callback));
+      /*tokens=*/{prefill_next_token},
+      /*start_pos=*/start_pos,
+      /*max_new_tokens=*/seq_len - start_pos + 1,
+      /*temperature=*/temperature_,
+      /*token_callback=*/token_callback));
 
   // Bookkeeping
   stats_.num_generated_tokens = num_generated_tokens;

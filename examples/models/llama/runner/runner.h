@@ -33,26 +33,22 @@ class ET_EXPERIMENTAL Runner : public executorch::extension::llm::IRunner {
   explicit Runner(
       const std::string& model_path,
       const std::string& tokenizer_path,
-      const float temperature = 0.8f,
       std::optional<const std::string> data_path = std::nullopt);
 
   bool is_loaded() const;
   ::executorch::runtime::Error load();
   ::executorch::runtime::Error generate(
       const std::string& prompt,
-      int32_t seq_len = 128,
+      const ::executorch::extension::llm::GenerationConfig& config,
       std::function<void(const std::string&)> token_callback = {},
       std::function<void(const ::executorch::extension::llm::Stats&)>
-          stats_callback = {},
-      bool echo = true,
-      bool warming = false);
+          stats_callback = {});
   ::executorch::runtime::Error warmup(
       const std::string& prompt,
-      int32_t seq_len = 128);
+      int32_t max_new_tokens);
   void stop();
 
  private:
-  float temperature_;
   bool shouldStop_{false};
 
   // model
