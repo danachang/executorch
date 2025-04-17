@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LlmBenchmarkActivity extends Activity implements ModelRunnerCallback {
   ModelRunner mModelRunner;
@@ -80,8 +82,17 @@ public class LlmBenchmarkActivity extends Activity implements ModelRunnerCallbac
 
   @Override
   public void onStats(String result) {
-    // TODO: Add tps
-    // mStatsInfo.tokens = stats;
+    float tps = 0;
+    try {
+      JSONObject jsonObject = new JSONObject(stats);
+      int numGeneratedTokens = jsonObject.getInt("num_generated_tokens");
+      int inferenceEndMs = jsonObject.getInt("inference_end_ms");
+      int promptEvalEndMs = jsonObject.getInt("prompt_eval_end_ms");
+      tps = (float) numGeneratedTokens / (inferenceEndMs - promptEvalEndMs) * 1000;
+      mStatsInfo.tokens = String.valueOf(tps);
+    } catch (JSONException e) {
+      Log.e("LLM", "Error parsing JSON: " + e.getMessage());
+    }
   }
 
   @Override
